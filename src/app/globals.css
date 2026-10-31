@@ -1,0 +1,195 @@
+@import "tailwindcss";
+@import "@fontsource-variable/bricolage-grotesque/index.css";
+@import "@fontsource/atkinson-hyperlegible/400.css";
+@import "@fontsource/atkinson-hyperlegible/700.css";
+@import "@fontsource/atkinson-hyperlegible/400-italic.css";
+
+/*
+ * Identidad visual de SaludConecta.
+ * Verde de uniforme quirúrgico para la tinta, papel frío de formulario y el
+ * amarillo del resaltador con que las recepcionistas marcan los turnos tomados
+ * en la agenda de papel. El resaltador solo se usa para turnos y estados vivos.
+ */
+@theme {
+    --color-tinta: #0e2f2c;
+    --color-pino: #1b5e55;
+    --color-pino-claro: #2f7a6f;
+    --color-menta: #e4f0eb;
+    --color-menta-fuerte: #cfe4db;
+    --color-papel: #fafbf9;
+    --color-linea: #cddbd5;
+    --color-gris: #4d625e;
+    --color-gris-suave: #7a8c88;
+    --color-resaltador: #f5dc4a;
+    --color-resaltador-suave: #fbf0a8;
+    --color-alerta: #b0402c;
+    --color-alerta-suave: #f8e3de;
+
+    --font-display: "Bricolage Grotesque Variable", "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --radius-turno: 6px;
+}
+
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+    }
+    body {
+        background: var(--color-papel);
+        color: var(--color-tinta);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        line-height: 1.55;
+    }
+    h1, h2, h3, h4 {
+        font-family: var(--font-display);
+        font-optical-sizing: auto;
+        line-height: 1.08;
+        letter-spacing: -0.015em;
+        text-wrap: balance;
+    }
+    p {
+        text-wrap: pretty;
+    }
+    :focus-visible {
+        outline: 3px solid var(--color-pino-claro);
+        outline-offset: 2px;
+        border-radius: 4px;
+    }
+    ::selection {
+        background: var(--color-resaltador);
+        color: var(--color-tinta);
+    }
+    input, select, textarea, button {
+        font: inherit;
+    }
+}
+
+@layer components {
+    .campo {
+        width: 100%;
+        border: 1.5px solid var(--color-linea);
+        background: #fff;
+        border-radius: 8px;
+        padding: 0.65rem 0.8rem;
+        color: var(--color-tinta);
+        transition: border-color 120ms;
+    }
+    .campo:hover {
+        border-color: var(--color-gris-suave);
+    }
+    .campo:focus {
+        outline: none;
+        border-color: var(--color-pino);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-pino) 18%, transparent);
+    }
+    .etiqueta {
+        display: block;
+        font-weight: 700;
+        font-size: 0.92rem;
+        margin-bottom: 0.3rem;
+    }
+    .ayuda {
+        font-size: 0.85rem;
+        color: var(--color-gris);
+        margin-top: 0.25rem;
+    }
+    .boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        border-radius: 999px;
+        padding: 0.7rem 1.3rem;
+        font-weight: 700;
+        line-height: 1.2;
+        transition: background-color 120ms, color 120ms, border-color 120ms, transform 80ms;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .boton:active {
+        transform: translateY(1px);
+    }
+    .boton:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+    .boton-primario {
+        background: var(--color-tinta);
+        color: var(--color-papel);
+    }
+    .boton-primario:hover {
+        background: var(--color-pino);
+    }
+    .boton-resaltado {
+        background: var(--color-resaltador);
+        color: var(--color-tinta);
+    }
+    .boton-resaltado:hover {
+        background: #edd02c;
+    }
+    .boton-secundario {
+        background: transparent;
+        color: var(--color-tinta);
+        border: 1.5px solid var(--color-tinta);
+    }
+    .boton-secundario:hover {
+        background: var(--color-menta);
+    }
+    .boton-peligro {
+        background: transparent;
+        color: var(--color-alerta);
+        border: 1.5px solid currentColor;
+    }
+    .boton-peligro:hover {
+        background: var(--color-alerta-suave);
+    }
+    .boton-pequeno {
+        padding: 0.45rem 0.9rem;
+        font-size: 0.9rem;
+    }
+    .enlace {
+        color: var(--color-pino);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        text-decoration-thickness: 1.5px;
+    }
+    .enlace:hover {
+        color: var(--color-tinta);
+        text-decoration-color: var(--color-resaltador);
+        text-decoration-thickness: 4px;
+    }
+    /* Turno de agenda: la pieza que se repite en todo el producto. */
+    .turno {
+        border: 1.5px solid var(--color-linea);
+        border-radius: var(--radius-turno);
+        background: #fff;
+        padding: 0.5rem 0.4rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+        transition: background-color 120ms, border-color 120ms;
+    }
+    .turno:hover {
+        border-color: var(--color-pino);
+        background: var(--color-menta);
+    }
+    .turno[aria-pressed="true"] {
+        background: var(--color-resaltador);
+        border-color: var(--color-tinta);
+    }
+    .hoja {
+        background: #fff;
+        border: 1px solid var(--color-linea);
+        border-radius: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

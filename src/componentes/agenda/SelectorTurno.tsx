@@ -27,13 +27,15 @@ interface Props {
     medicoId: number | null;
     excluirCitaId?: number | null;
     onCambio?: (seleccion: { fecha: string; hora: string } | null) => void;
+    fechaInicial?: string | null;
+    horaInicial?: string | null;
 }
 
 /**
  * Selector de turno: una tira de días con cupo y los horarios libres del día
  * elegido. Escribe la selección en los campos ocultos fecha y hora.
  */
-export function SelectorTurno({ medicoId, excluirCitaId = null, onCambio }: Props) {
+export function SelectorTurno({ medicoId, excluirCitaId = null, onCambio, fechaInicial = null, horaInicial = null }: Props) {
     const [dias, setDias] = useState<DiaConTurnos[] | null>(null);
     const [fecha, setFecha] = useState<string | null>(null);
     const [hora, setHora] = useState<string | null>(null);
@@ -50,7 +52,16 @@ export function SelectorTurno({ medicoId, excluirCitaId = null, onCambio }: Prop
         iniciar(async () => {
             const resultado = await obtenerTurnos(medicoId, excluirCitaId);
             setDias(resultado);
-            if (resultado.length > 0) setFecha(resultado[0].fecha);
+            const preferido = resultado.find((d) => d.fecha === fechaInicial);
+            if (preferido) {
+                setFecha(preferido.fecha);
+                if (horaInicial && preferido.horas.includes(horaInicial)) {
+                    setHora(horaInicial);
+                    onCambio?.({ fecha: preferido.fecha, hora: horaInicial });
+                }
+            } else if (resultado.length > 0) {
+                setFecha(resultado[0].fecha);
+            }
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [medicoId, excluirCitaId]);

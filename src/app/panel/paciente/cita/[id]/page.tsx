@@ -8,10 +8,10 @@ import { requerirUsuario } from "@/lib/sesion";
 
 export const metadata = { title: "Detalle de la cita" };
 
-export default async function CitaPaciente({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ nueva?: string; movida?: string }> }) {
+export default async function CitaPaciente({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ nueva?: string; movida?: string; cancelada?: string }> }) {
     const usuario = await requerirUsuario("paciente");
     const { id } = await params;
-    const { nueva, movida } = await searchParams;
+    const { nueva, movida, cancelada } = await searchParams;
     const cita = await obtenerCita(Number(id));
     if (!cita || !puedeVerCita(usuario, cita)) notFound();
 
@@ -27,6 +27,12 @@ export default async function CitaPaciente({ params, searchParams }: { params: P
                     <p className="font-display text-2xl font-bold">{nueva ? "Tu cita quedó reservada" : "Movimos tu cita"}</p>
                     <p className="mt-1">Te recordaremos un día antes. Si no puedes ir, cancélala aquí para liberar el turno.</p>
                 </div>
+            )}
+
+            {cancelada && cita.estado === "cancelada" && (
+                <p role="status" className="mt-5 rounded-2xl border-l-4 border-pino bg-menta p-4 font-bold">
+                    Cancelaste la cita y el turno quedó libre para otra persona.
+                </p>
             )}
 
             <div className="mt-6 flex flex-wrap items-center gap-3">

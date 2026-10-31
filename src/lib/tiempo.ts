@@ -121,3 +121,13 @@ export function calcularEdad(fechaNacimiento: string | null | undefined): number
     if (m2 < m1 || (m2 === m1 && d2 < d1)) edad -= 1;
     return edad;
 }
+
+/** Primer día desde `desde` (incluido) cuyo día de la semana esté en la lista; si no hay, `desde`. */
+export function proximoDiaCon(desde: string, dias: number[]): string {
+    if (dias.length === 0) return desde;
+    for (let i = 0; i < 7; i += 1) {
+        const fecha = sumarDias(desde, i);
+        if (dias.includes(diaSemana(fecha))) return fecha;
+    }
+    return desde;
+}

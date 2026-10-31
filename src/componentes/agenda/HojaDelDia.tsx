@@ -54,8 +54,8 @@ export function HojaDelDia({
                 {entradas.map((e) =>
                     e.tipo === "cita" ? (
                         <li key={`c-${e.cita.id}`} className="border-b border-linea last:border-b-0">
-                            <Link href={rutaCita(e.cita.id)} className="grid grid-cols-[4.6rem_1fr] items-center gap-3 px-3 py-3 hover:bg-menta/50 sm:grid-cols-[6rem_1fr_auto] sm:px-5">
-                                <span className="font-bold tabular-nums">{formatearHora(e.cita.inicio)}</span>
+                            <Link href={rutaCita(e.cita.id)} className="grid grid-cols-[5.6rem_1fr] items-center gap-3 px-3 py-3 hover:bg-menta/50 sm:grid-cols-[6rem_1fr_auto] sm:px-5">
+                                <span className="whitespace-nowrap font-bold tabular-nums">{formatearHora(e.cita.inicio)}</span>
                                 <span className={`min-w-0 rounded-md px-3 py-2 ${e.cita.estado === "programada" ? "bg-resaltador-suave" : "bg-menta/70"}`}>
                                     <span className="block truncate font-bold">
                                         {e.cita.paciente_nombres} {e.cita.paciente_apellidos}
@@ -71,8 +71,8 @@ export function HojaDelDia({
                             </Link>
                         </li>
                     ) : (
-                        <li key={`l-${e.minuto}`} className="grid grid-cols-[4.6rem_1fr] items-center gap-3 border-b border-linea px-3 py-2 text-gris last:border-b-0 sm:grid-cols-[6rem_1fr] sm:px-5">
-                            <span className="tabular-nums">{formatearHora(e.hora)}</span>
+                        <li key={`l-${e.minuto}`} className="grid grid-cols-[5.6rem_1fr] items-center gap-3 border-b border-linea px-3 py-2 text-gris last:border-b-0 sm:grid-cols-[6rem_1fr] sm:px-5">
+                            <span className="whitespace-nowrap tabular-nums">{formatearHora(e.hora)}</span>
                             {enlaceAgendar ? (
                                 <Link href={enlaceAgendar(e.hora)} className="rounded-md border border-dashed border-linea px-3 py-1.5 text-sm hover:border-pino hover:text-pino">Libre, agendar aquí</Link>
                             ) : (

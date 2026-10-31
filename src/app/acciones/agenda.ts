@@ -199,7 +199,7 @@ export async function cancelarCitaAccion(_previo: EstadoFormulario, datos: FormD
     }
     await auditar(usuario.id, "cancelar_cita", "cita", cita.id, motivo || null);
     revalidatePath("/panel", "layout");
-    return { exito: "La cita quedó cancelada y el turno está libre otra vez." };
+    redirect(`${rutaCita(usuario.rol, cita.id)}?cancelada=1`);
 }
 
 /** Reprograma una cita a otro turno del mismo profesional. */

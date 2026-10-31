@@ -7,10 +7,10 @@ import { fechaBogota } from "@/lib/tiempo";
 
 export const metadata = { title: "Cita" };
 
-export default async function CitaMedico({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ movida?: string }> }) {
+export default async function CitaMedico({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ movida?: string; cancelada?: string }> }) {
     const usuario = await requerirUsuario("medico");
     const { id } = await params;
-    const { movida } = await searchParams;
+    const { movida, cancelada } = await searchParams;
     const cita = await obtenerCita(Number(id));
     if (!cita || !puedeVerCita(usuario, cita)) notFound();
     return (
@@ -18,7 +18,7 @@ export default async function CitaMedico({ params, searchParams }: { params: Pro
             usuario={usuario}
             cita={cita}
             volver={`/panel/medico?fecha=${fechaBogota(cita.inicio)}`}
-            aviso={movida ? "Cita movida. Le avisamos al paciente." : null}
+            aviso={cancelada ? "Cita cancelada. Le avisamos al paciente." : movida ? "Cita movida. Le avisamos al paciente." : null}
         />
     );
 }

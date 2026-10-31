@@ -6,7 +6,7 @@ import { EncabezadoPagina } from "@/componentes/panel/ui";
 import { listarCitasMedico } from "@/lib/modelos/citas";
 import { buscarMedicoPorUsuario, listarBloqueos, obtenerDisponibilidad } from "@/lib/modelos/medicos";
 import { requerirUsuario } from "@/lib/sesion";
-import { esFechaValida, fechaBogota, hoyBogota, sumarDias } from "@/lib/tiempo";
+import { esFechaValida, fechaBogota, hoyBogota, proximoDiaCon, sumarDias } from "@/lib/tiempo";
 
 export const metadata = { title: "Mi agenda" };
 
@@ -15,12 +15,13 @@ export default async function AgendaMedico({ searchParams }: { searchParams: Pro
     const medico = await buscarMedicoPorUsuario(usuario.id);
     if (!medico) notFound();
     const { fecha: fechaParam } = await searchParams;
-    const fecha = fechaParam && esFechaValida(fechaParam) ? fechaParam : hoyBogota();
+    const horario = await obtenerDisponibilidad(medico.id);
+    // Sin fecha elegida, abre el día de hoy o, si hoy no atiende, el siguiente día con consulta.
+    const fecha = fechaParam && esFechaValida(fechaParam) ? fechaParam : proximoDiaCon(hoyBogota(), horario.map((h) => h.dia_semana));
     const lunes = lunesDe(fecha);
 
-    const [citasSemana, horario, bloqueos] = await Promise.all([
+    const [citasSemana, bloqueos] = await Promise.all([
         listarCitasMedico(medico.id, lunes, sumarDias(lunes, 6)),
-        obtenerDisponibilidad(medico.id),
         listarBloqueos(medico.id, fecha),
     ]);
     const conteos: Record<string, number> = {};

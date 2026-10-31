@@ -5,6 +5,8 @@ import { NOMBRES_DIAS, NOMBRES_DIAS_CORTOS, diaSemana, hoyBogota, sumarDias } fr
 
 export const revalidate = 3600;
 
+const DOMINIO = (process.env.NEXT_PUBLIC_URL_SITIO?.replace(/^https?:\/\//, "") || process.env.VERCEL_PROJECT_PRODUCTION_URL || "saludconecta").replace(/\/$/, "");
+
 const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
 function diasVitrina(): DiaVitrina[] {
@@ -196,7 +198,7 @@ export default function PaginaInicio() {
                             <h3 className="mt-3 text-xl font-bold">Comparte tu enlace</h3>
                             <p className="mt-2 text-papel/75">Ponlo en tu WhatsApp, Instagram o Google. Desde ahí reservan tus pacientes.</p>
                             <p className="mt-4 inline-block rounded-md bg-papel/10 px-3 py-2 text-sm text-papel">
-                                saludconecta.vercel.app/c/<span className="text-resaltador">tu-consultorio</span>
+                                {DOMINIO}/c/<span className="text-resaltador">tu-consultorio</span>
                             </p>
                         </li>
                     </ol>

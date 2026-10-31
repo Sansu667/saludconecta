@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
-const URL_SITIO = process.env.NEXT_PUBLIC_URL_SITIO || "https://saludconecta.vercel.app";
+const URL_SITIO =
+    process.env.NEXT_PUBLIC_URL_SITIO ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
 
 export const metadata: Metadata = {
     metadataBase: new URL(URL_SITIO),

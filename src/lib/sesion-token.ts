@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { SignJWT, jwtVerify } from "jose";
 
 /**
@@ -15,15 +16,19 @@ export interface CargaSesion {
     cid: number | null;
 }
 
+/**
+ * Clave de firma. Usa AUTH_SECRET si existe; si no, la deriva de la cadena de
+ * conexión de la base de datos, que también es secreta y solo vive en el servidor.
+ */
 function obtenerClave(): Uint8Array {
     const secreto = process.env.AUTH_SECRET;
-    if (!secreto) {
-        if (process.env.NODE_ENV === "production" && process.env.VERCEL) {
-            throw new Error("Falta la variable AUTH_SECRET.");
-        }
-        return new TextEncoder().encode("clave-de-desarrollo-local-no-usar-en-produccion");
+    if (secreto) return new TextEncoder().encode(secreto);
+    const urlBaseDatos = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+    if (urlBaseDatos) {
+        return new Uint8Array(createHash("sha256").update(`saludconecta-sesion:${urlBaseDatos}`).digest());
     }
-    return new TextEncoder().encode(secreto);
+    if (process.env.VERCEL) throw new Error("Falta AUTH_SECRET o DATABASE_URL.");
+    return new TextEncoder().encode("clave-de-desarrollo-local-no-usar-en-produccion");
 }
 
 /** Crea un token firmado (HS256) con la identidad y el rol del usuario. */
